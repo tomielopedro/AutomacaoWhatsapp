@@ -17,8 +17,8 @@ Abaixo vou descrever detalhadamente como funciona cada um desses arquivos.
 ## Sumário
 - [Buscar Dados](#buscar-dados)
 - [Tratar Dados](#tratar-dados)
-- [Enviar Mensagens](#contribuição)
-- [Main](#licença)
+- [Enviar Mensagens](#enviar-mensagem)
+- [Main](#main)
 
 # Buscar dados:
 Essa é a primeira etapa do código, consiste em usar a ferramenta *Selenium* para entrar no sistema da empresa e baixar os dados necessários para o tratamento e envio de mensagens.
@@ -58,47 +58,116 @@ Um coisa muito importante nesse código é a ordem que as funções são chamada
 
 Trabalhamos principalmente com a biblioteca Pandas para tratar o arquivo .xlsx quem é baixado do sistema 
 
-### - Filtra Dados
+Para esse tratamento são esperadas as seguintes colunas no DataFrame:
+
+ - Data Cadastro Reserva 
+ - Data Reserva
+ - Hora
+ - Cliente	
+ - Celular	
+ - Data Cadastro Cliente	
+ - E-mail	
+ - Profissional	
+ - Serviço	
+ - Origem	
+ - Status
+ - Observação	
+ - Data Comanda	
+ - Número	
+ - Quem Cadastrou
+
+
+## Todas as funções acima ficam dentro de outra funçao para ordenar a ordem de execução, a baixo está a ordem que as funções devem obedecer
+
+
+
+- [remover_colunas(colunas_tirar)](#remover_colunas)
+
+- [self.remover_profissionais(profissionais_remover)](#remover_profissionais)
+
+- [remover_clientes(clientes_remover)](#remover_cliente)
+
+- [filtrar_status(status)](#fitrar_status)
+
+- [formatar_data()](#formtar_data)
+
+- [tratar_numero()](#tratar_numero)
+
+- [criar_coluna_nome()](#criar_coluna_nome)
+
+- [criar_coluna_dia()](#criar_coluna_dia)
+
+- [criar_coluna_data()](#criar-colunas)
+
+- [mapear_servicos(servicos_mapear)](#mapear-serviços)
+
+- [agrupar_df(agregacoes)](#agrupar-dataframe)
+
+- [tratar_hora_e_servico()](#tratar-hora-e-serviço)
+
+- [-formatar_em_string()](#tratar-dados)
+
+### Filtra Dados
                 
-                Como o arquivo baixado do sistema vem com muitas informações, precisamos filtrar o DataFrame para ficarmos apenas com as informações relevantes:
+Como o arquivo baixado do sistema vem com muitas informações, precisamos filtrar o DataFrame para ficarmos apenas com as informações relevantes:
 
-                A tarefa de filtrar esses dados foi definida nas seguintes funções:
 
-                        -remover_colunas() recebe como parametro todas as colunas que desejamos remover, esses parametros são passados ao instanciar a classe.
+A tarefa de filtrar esses dados foi definida nas seguintes funções:
 
-                        -remover_profissionais() essa função recebe como parametro o nome dos profissionais que desejamos remover.Esse parametro é passado ao instanciar a classe.
 
-                        -remover_cliente() essa função recebe como parametro o nome dos clientes que desejamos remover.Esse parametro é passado ao instanciar a classe.
+#### -remover_colunas()
 
-                        -fitrar_status() essa função recebe como parametro o tipo de Status desejamos manter.Esse parametro é passado ao instanciar a classe.O arquivo baixado vem com 3 possíveis tipos de Status de agendamento: Agendado, Confirmado e Cancelado.
+        recebe como parametro todas as colunas que desejamos remover, esses parametros são passados ao instanciar a classe.
+
+### -remover_profissionais() 
+
+        essa função recebe como parametro o nome dos profissionais que desejamos remover.Esse parametro é passado ao instanciar a classe.
+
+#### -remover_cliente() 
+
+        essa função recebe como parametro o nome dos clientes que desejamos remover.Esse parametro é passado ao instanciar a classe.
+
+#### -fitrar_status() 
+
+        essa função recebe como parametro o tipo de Status desejamos manter.Esse parametro é passado ao instanciar a classe.O arquivo baixado vem com 3 possíveis tipos de Status de agendamento: Agendado, Confirmado e Cancelado.
 
 
         
 
-### Formatar Dados:
+## Formatar Dados:
 
-                Após ficarmos apenas com os dados relevantes no DataFrame, vamos trata-los a fim de que fiquem no padrão esperado.
+Após ficarmos apenas com os dados relevantes no DataFrame, vamos trata-los a fim de que fiquem no padrão esperado.
 
-                        -formtar_data() Essa função garante que a coluna Data só contenha datas no formato d/m/Y
 
-                        -tratar_numero() Essa função executa uma função chamada formatar_numero() que é muito importante.
+#### -formtar_data() 
 
-                        -formatar_numero() -garante que os numeros contidos no DataFrame contanham 12 numeros e sejam no formato XX XX XXXXXXXX
+        Essa função garante que a coluna Data só contenha datas no formato d/m/Y
 
-                        fortmatar_em_string() Essa função transforma em string as colunas HORA, PROFISSIONAL e SERVIÇO que anteriormente eram lista
+#### -tratar_numero() 
+        Essa função executa uma função chamada formatar_numero() que é muito importante.
+
+        -formatar_numero() -garante que os numeros contidos no DataFrame contanham 12 numeros e sejam no formato XX XX XXXXXXXX
+
+#### fortmatar_em_string() 
+
+        Essa função transforma em string as colunas HORA, PROFISSIONAL e SERVIÇO que anteriormente eram lista
                 
                 
 
                 
-### Criar Colunas
-                As funções a seguir criam colunas novas no DataFrame que contém dados importantes:
+## Criar Colunas
+As funções a seguir criam colunas novas no DataFrame que contém dados importantes:
                         
-                        -criar_coluna_dia() Essa função cria uma nova coluna no DataFrame que contem o dia da semana em que a data selecionada se refere.
+#### -criar_coluna_dia() 
 
-                        -criar_coluna_nome() Essa função cria uma nova coluna no DataFrame que contém apenas o primeiro nome dos clientes.
+        Essa função cria uma nova coluna no DataFrame que contem o dia da semana em que a data selecionada se refere.
+
+#### -criar_coluna_nome() 
+        
+        Essa função cria uma nova coluna no DataFrame que contém apenas o primeiro nome dos clientes.
 
 
-As próximas funções merecem uma seção específica, pois todas os tratamentos anteriores trabalham para que as funções a seguir funcionem bem
+## As próximas funções merecem uma seção específica, pois todas os tratamentos anteriores trabalham para que as funções a seguir funcionem bem
 
 
 
@@ -133,7 +202,7 @@ As próximas funções merecem uma seção específica, pois todas os tratamento
                 Esse função garante que a horario agendado corresponda exatamente com o serviço agendado, essa função foi implementada pois ao agrupar o DataFrame estavam ocorrendo desordenamento entre os horarios e serviços nas linhas que contianham mais de um agendamento.
 
 
-### Salvar DataFrame - sub-etapa 13
+### Salvar DataFrame
 
                 Nessa parte chamamos as função salvar_csv()
 
@@ -141,33 +210,7 @@ As próximas funções merecem uma seção específica, pois todas os tratamento
 
                 Esse arquivo é salvo em .csv para poder ser lido pelo JavaScrip.
 
-## Todas as funções acima ficam dentro de outra funçao para ordenar a ordem de execução, a baixo está a ordem que as funções devem obedecer
 
--[remover_colunas(colunas_tirar)](###-Filtra-Dados)
-
--self.remover_profissionais(profissionais_remover)
-
--remover_clientes(clientes_remover)
-
--filtrar_status(status)
-
--formatar_data()
-
--tratar_numero()
-
--criar_coluna_nome()
-
--criar_coluna_dia()
-
--criar_coluna_data()
-
--mapear_servicos(servicos_mapear)
-
--agrupar_df(agregacoes)
-
--tratar_hora_e_servico() #muito importante
-
--formatar_em_string()
         
 
 Em suma esse arquivo de código faz um tratamento minucioso nos dados e garante ao arquivo que envia as mensagens uma facilidade por não precisar se preocupar em nada do tratamento dos dados.
