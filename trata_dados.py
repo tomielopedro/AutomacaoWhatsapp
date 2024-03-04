@@ -5,6 +5,8 @@ class ProcessamentoDados:
 
     def __init__(self, arquivo_excel):
         self.df = pd.read_excel(arquivo_excel)
+        pd.set_option('display.max_rows', None)
+        pd.set_option('display.max_columns', None)
 
 # FORMATAR COLUNAS
     def formatar_numero(self, numero_telefone):
@@ -89,6 +91,13 @@ class ProcessamentoDados:
     def tratar_hora_e_servico(self):
         self.df[['Hora', 'Serviço']] = self.df.apply(lambda row: self.ordenar_horario_servico(zip(row['Hora'], row['Serviço'])), axis=1, result_type='expand')
 
+    def remover_servicos(self, servicos_para_excluir):
+        servicos_existentes = self.df['Serviço'].unique()
+        servicos_validos = [servico for servico in servicos_para_excluir if servico in servicos_existentes]
+        self.df = self.df[~self.df['Serviço'].isin(servicos_validos)]
+        print(f'Serviços Removidos: {servicos_validos} ')
+    
+
 # CLIENTES:
     def remover_clientes(self, clientes):
         # Remove clientes selecionados
@@ -116,7 +125,7 @@ class ProcessamentoDados:
         self.df = self.df.groupby('Cliente').agg(agregacoes).reset_index()
 
 # PROCESSAMENTO: 
-    def processar_dados(self, colunas_tirar, profissionais_remover, clientes_remover, status, servicos_mapear, agregacoes): 
+    def processar_dados(self, colunas_tirar, profissionais_remover, clientes_remover, status, servicos_mapear, agregacoes, servicos_remover): 
     # Importante lembrar que as funções devem seguir exatamente essa ordem, a inversão pode gerar erros no código
         print(100*'=')
         print('Iniciando o tratamento de dados')
@@ -130,6 +139,8 @@ class ProcessamentoDados:
     
         self.remover_clientes(clientes_remover)
 
+        self.remover_servicos(servicos_remover)
+
     # Filtrando o DataFrame para Status == ao selecionado
         self.filtrar_status(status)
     
@@ -137,7 +148,7 @@ class ProcessamentoDados:
         self.formatar_data()
         self.tratar_numero()
     
-        self.df['Telefone'] = 555496593943
+        
 
     # Criar Colunas
         self.criar_coluna_nome()
@@ -154,6 +165,9 @@ class ProcessamentoDados:
     # Tratamento de colunas
         self.tratar_hora_e_servico() #muito importante
         self.formatar_em_string()
+
+
+
         
         print('Arquivo Tratado com Sucesso')
         print(100*'=')
