@@ -127,6 +127,9 @@ A tarefa de filtrar esses dados foi definida nas seguintes funções:
 
         essa função recebe como parametro o nome dos clientes que desejamos remover.Esse parametro é passado ao instanciar a classe.
 
+### -remover_servicos()
+        essa função recebe como parametro o nome dos serviços que desejamos remover.Esse parametro é passado ao instanciar a classe.
+
 #### -fitrar_status() 
 
         essa função recebe como parametro o tipo de Status desejamos manter.Esse parametro é passado ao instanciar a classe.O arquivo baixado vem com 3 possíveis tipos de Status de agendamento: Agendado, Confirmado e Cancelado.

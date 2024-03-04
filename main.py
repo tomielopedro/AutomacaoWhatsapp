@@ -23,6 +23,7 @@ caminho_saida = r"./planilha_tratada/agendamentos.csv"
 colunas_para_tirar = ['Data Cadastro Reserva', 'Data Cadastro Cliente', 'E-mail', 'Origem', 'Observação',
                      'Data Comanda', 'Número', 'Quem Cadastrou']
 profissionais_remover = [""]
+servicos_remover = ['']
 clientes_remover = [""]
 status = [""]
 servicos_mapeados = {
@@ -145,7 +146,7 @@ agregacoes = {
 
 # Chamando Classe
 processador = ProcessamentoDados(arquivo_entrada)
-processador.processar_dados(colunas_para_tirar, profissionais_remover, clientes_remover, status, servicos_mapeados, agregacoes)
+processador.processar_dados(colunas_para_tirar, profissionais_remover, clientes_remover, status, servicos_mapeados, agregacoes, servicos_remover)
 processador.salvar_csv(caminho_saida)
 
 
