@@ -75,21 +75,23 @@ class ProcessamentoDados:
         print(f'Profissionais Removidos: {profissionais_validos}')
     
 # SERVICOS    
-    def ordenar_horario_servico(self, pares):
+    def ordenar_horario_servico_profissional(self, trios):
         # Ordenar os pares (horário, serviço) por horário
-        pares_ordenados = sorted(pares, key=lambda x: x[0])
+        trios_ordenados = sorted(trios, key=lambda x: x[0])
         # Separar os horários e serviços ordenados
-        horarios_ordenados = [par[0] for par in pares_ordenados]
-        servicos_ordenados = [par[1] for par in pares_ordenados]
-        return horarios_ordenados, servicos_ordenados
-        # essa função garante que os horarios correspondam aos seus respectivos serviços
+        horarios_ordenados = [trio[0] for trio in trios_ordenados]
+        servicos_ordenados = [trio[1] for trio in trios_ordenados]
+        profissionais_ordenados = [trio[2] for trio in trios_ordenados]
+        return horarios_ordenados, servicos_ordenados, profissionais_ordenados
+        # essa função garante que os horarios correspondam aos seus respectivos serviços e profissionais
     
     def mapear_servicos(self, servicos_mapeados):
         # Mapeio os serviços e muda o nome original por nomes selecionados
         self.df['Serviço'] = self.df['Serviço'].apply(lambda x: servicos_mapeados.get(x, x))
 
-    def tratar_hora_e_servico(self):
-        self.df[['Hora', 'Serviço']] = self.df.apply(lambda row: self.ordenar_horario_servico(zip(row['Hora'], row['Serviço'])), axis=1, result_type='expand')
+    def tratar_hora_e_servico_profissional(self):
+        self.df[['Hora', 'Serviço', 'Profissional']] = self.df.apply(lambda row: 
+                                self.ordenar_horario_servico_profissional(zip(row['Hora'], row['Serviço'], row['Profissional'] )), axis=1, result_type='expand')
 
     def remover_servicos(self, servicos_para_excluir):
         servicos_existentes = self.df['Serviço'].unique()
@@ -149,7 +151,7 @@ class ProcessamentoDados:
         self.tratar_numero()
     
         
-
+        
     # Criar Colunas
         self.criar_coluna_nome()
         self.criar_coluna_dia()
@@ -163,7 +165,7 @@ class ProcessamentoDados:
         self.agrupar_df(agregacoes)
 
     # Tratamento de colunas
-        self.tratar_hora_e_servico() #muito importante
+        self.tratar_hora_e_servico_profissional() #muito importante
         self.formatar_em_string()
 
 
@@ -183,7 +185,3 @@ class ProcessamentoDados:
         self.df.to_csv(caminho_saida, index=False)
         print(self.df)
         print("Arquivo CSV salvo com sucesso.")
-
-
-
- 
